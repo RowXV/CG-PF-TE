@@ -1,0 +1,32 @@
+# Blender 4.0.2 MTL File: 'checkpoint.blend'
+# www.blender.org
+
+newmtl Standardmaterial1
+Ns 10.083003
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd checkpoint/cmn_save03_dflu_r.png
+map_Ks checkpoint/cmn_save03_dflu_r_alpha.png
+
+newmtl Standardmaterial2
+Ns 10.083003
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd checkpoint/cmn_save02_dflu_r.png
+map_Ks checkpoint/cmn_save02_dflu_r_alpha.png
+
+newmtl Standardmaterial3
+Ns 10.083003
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd checkpoint/cmn_save01_dfsp_r.png
+map_Ks checkpoint/cmn_save01_dfsp_r_alpha.png
