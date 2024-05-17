@@ -16,60 +16,8 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	update();
 }
 
-//Controles Camara Aerea
-void Camera::keyControl(bool* keys, GLfloat deltaTime)
-{
-	GLfloat velocity = moveSpeed * deltaTime;
-	glm::vec3 frontNoY = glm::normalize(glm::vec3(front.x, 0.0f, front.z)); // Eliminamos componente Y de la dirección
-
-	if (keys[GLFW_KEY_I])
-	{
-		position -= frontNoY * velocity;
-	}
-
-	if (keys[GLFW_KEY_K])
-	{
-		position += frontNoY * velocity;
-	}
-	if (keys[GLFW_KEY_J])
-	{
-		position -= right * velocity;
-	}
-
-	if (keys[GLFW_KEY_L])
-	{
-		position += right * velocity;
-	}
-}
-
-//Controles Camara Sonic
-void Camera::keyControlSon(bool* keys, GLfloat deltaTime)
-{
-	GLfloat velocity = moveSpeed * deltaTime;
-
-	if (keys[GLFW_KEY_T])
-	{
-		position += front * velocity;
-	}
-
-	if (keys[GLFW_KEY_G])
-	{
-		position -= front * velocity;
-	}
-
-	if (keys[GLFW_KEY_F])
-	{
-		position -= right * velocity;
-	}
-
-	if (keys[GLFW_KEY_H])
-	{
-		position += right * velocity;
-	}
-}
-
 //Controles Camara Depresso
-void Camera::keyControlDep(bool* keys, GLfloat deltaTime)
+void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
 

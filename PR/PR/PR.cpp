@@ -210,7 +210,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.3f,
+		0.75f, 0.3f,
 		0.0f, 0.0f, -1.0f);
 
 	//LUCES PUNTUALES

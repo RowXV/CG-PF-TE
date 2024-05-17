@@ -13,23 +13,6 @@ public:
 	GLfloat getBufferHeight() { return bufferHeight; }
 	GLfloat getXChange();
 	GLfloat getYChange();
-	
-	
-	//Movimientos personajes
-	//Depresso
-	GLfloat getgiroIzDepress() { return giroIzDepress; }
-	GLfloat getgiroDeDepress() { return giroDeDepress; }
-	GLfloat getmovDepress() { return movDepress; }
-	//Sonic
-	GLfloat getgiroIzSonic() { return giroIzSonic; }
-	GLfloat getgiroDeSonic() { return giroDeSonic; }
-	GLfloat getmovSonic() { return movSonic; }
-
-	//Camara
-	GLfloat getopcion() { return opcion; }
-
-	//Orbe
-	GLfloat getOrbePrendido() { return orbePrendido;  }
 
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
@@ -47,21 +30,6 @@ private:
 	GLfloat lastY;
 	GLfloat xChange;
 	GLfloat yChange;
-	
-
-	//Movimiento Personajes
-	//Depresso
-	GLfloat giroIzDepress;
-	GLfloat giroDeDepress;
-	GLfloat movDepress;
-	//Sonic
-	GLfloat giroIzSonic;
-	GLfloat giroDeSonic;
-	GLfloat movSonic;
-	//Camara opcion
-	GLfloat opcion;
-	//Prendido del orbe
-	bool orbePrendido = true; //el orbe comienza prendido
 
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
