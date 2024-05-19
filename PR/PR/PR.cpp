@@ -60,10 +60,10 @@ Texture pisoTexture;	//Textura de piso
 //Modelos a utilizar en entorno opengl
 
 //Edificaciones
-Model PSol;
+//Model Casa;
 
 //Objetos
-Model Lifmunk;
+Model Taylor;
 
 //Skybox a utilizar en entorno opengl
 //Dos tipos para el dia y la noche
@@ -187,12 +187,12 @@ int main()
 
 	//********************************CARGA DE MODELOS*************************************
 	//Objetos
-	Lifmunk = Model();
-	Lifmunk.LoadModel("Models/Lifmunk.obj");
+	Taylor = Model();
+	Taylor.LoadModel("Models/Taylor.obj");
 
-	//Edificaciones
-	PSol = Model();
-	PSol.LoadModel("Models/PSol.obj");
+	//Cornelias
+	//Casa = Model();
+	//Casa.LoadModel("Models/Casa.obj");
 
 	std::vector<std::string> skyboxFaces;
 
@@ -275,8 +275,6 @@ int main()
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	
 	//Loop mientras no se cierra la ventana
-	
-	
 
 	//Variable animacion Orbe
 	movOffset = 0.05f;
@@ -353,7 +351,7 @@ int main()
 		//**************************************************************************PISO**************************************************************************
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(50.0f, 1.0f, 50.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 1.0f, 10.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 
@@ -364,9 +362,9 @@ int main()
 
 		//**************************************************************************EDIFICACIONES**************************************************************************
 
-		//PIRAMIDE DEL SOL
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-247.0f, 0.0f, 245.0f));
+		//Casa
+		/*model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0f.0f));
 		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -375,19 +373,17 @@ int main()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		PSol.RenderModel();
-		glDisable(GL_BLEND);
+		Casa.RenderModel();
+		glDisable(GL_BLEND);*/
 
 		//**************************************************************************OBJETOS**************************************************************************
 
-		//Mineral (1)
+		//Poster Taylor (1)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-248.0f, 29.3f, 300.0f));
-		model = glm::rotate(model, movAnimBas2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//model = glm::rotate(model, movAnimBas2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Lifmunk.RenderModel();
-
-		
+		Taylor.RenderModel();
 
 		glUseProgram(0);
 
