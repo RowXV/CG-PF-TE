@@ -415,13 +415,13 @@ int main()
 
 		//**************************************************************************EDIFICACIONES**************************************************************************
 
-		////Casa
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
-		//model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		//Casa
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Casa.RenderModel();
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Casa.RenderModel();
 		
 
 		//**************************************************************************OBJETOS**************************************************************************
@@ -467,17 +467,17 @@ int main()
 		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		//BuroCajon.RenderModel();
 
-		//Silla (5)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		////Silla (5)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Silla.RenderModel();
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Silla.RenderModel();
 
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		AsientoSilla.RenderModel();
+		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//AsientoSilla.RenderModel();
 
 		//PLANTA ALTA
 		////Sillon Doble (6)
