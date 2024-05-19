@@ -35,17 +35,19 @@ Proyecto Final Teoria
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
-//Variables
 //Variables animacion 
-//Animacion compleja Orbe
-float movZigZag = 0.0f;					//Movimiento en el eje z de Orbe
-float movVert = 0.0f;					//Movimiento en el eje y de Orbe
-float movOffset;
-bool dir = true;						//Para cambiar la direccion en el eje y
 
-//Animacion basica Mineral
-float movAnimBas2;						//Movimiento de Mineral
-float movAnimBas2Offset = true;
+//Animacion Silla Bici
+float movBici = 0.0f;					//Movimiento en el eje y de asiento
+float movOffset;						//Velocidad
+
+float movPuerta = 0.0f;					//Movimiento puerta
+float movOffsetPuerta;					//Velocidad
+
+float movCajon = 0.0f;					//Movimiento cajon
+float movOffsetCajon;					//Velocidad
+bool dirCajon = true;					//direccion
+
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -78,6 +80,7 @@ Model SillDobl;
 Model LamPared;
 Model Mesa;
 Model AsBike;
+Model AsBikeSup;
 Model SillInd;
 
 //Skybox a utilizar en entorno opengl
@@ -194,7 +197,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 100.0f, 350.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 20.0f, 70.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
 
 	//********************************CARGA DE TEXTURAS*************************************
 	pisoTexture = Texture("Textures/piso.tga");
@@ -228,20 +231,23 @@ int main()
 	AsientoSilla.LoadModel("Models/AsientoSilla.obj");
 
 	////Planta Alta
-	//SillDobl = Model();
-	//SillDobl.LoadModel("Models/SillDobl.obj");
+	SillDobl = Model();
+	SillDobl.LoadModel("Models/SillDobl.obj");
 
-	//LamPared = Model();
-	//LamPared.LoadModel("Models/LamPared.obj");
+	LamPared = Model();
+	LamPared.LoadModel("Models/LamPared.obj");
 
-	//Mesa = Model();
-	//Mesa.LoadModel("Models/Mesa.obj");
+	Mesa = Model();
+	Mesa.LoadModel("Models/Mesa.obj");
 
-	//AsBike = Model();
-	//AsBike.LoadModel("Models/AsBike.obj");
+	AsBikeSup = Model();
+	AsBikeSup.LoadModel("Models/AsBikeSup.obj");
 
-	//SillInd = Model();
-	//SillInd.LoadModel("Models/SillInd.obj");
+	AsBike = Model();
+	AsBike.LoadModel("Models/AsBike.obj");
+
+	SillInd = Model();
+	SillInd.LoadModel("Models/SillInd.obj");
 
 	//Cornelias
 	Casa = Model();
@@ -262,9 +268,9 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 	//luz direccional, sólo 1 y siempre debe de existir
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+	/*mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.65f, 0.3f,
-		0.0f, 0.0f, -1.0f);
+		0.0f, 0.0f, -1.0f);*/
 
 	//LUCES PUNTUALES
 	//Contador de luces puntuales
@@ -329,11 +335,10 @@ int main()
 	
 	//Loop mientras no se cierra la ventana
 
-	//Variable animacion Orbe
-	movOffset = 0.05f;
-
-	movAnimBas2 = 0.0f;
-	movAnimBas2Offset = 0.5f;
+	//Variables animacion Velocidad
+	movOffset = 1.5f;
+	movOffsetPuerta = 1.5f;
+	movOffsetCajon = 0.01f;
 
 
 	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
@@ -345,28 +350,46 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
-		//Animacion Mineral
-		movAnimBas2 += movAnimBas2Offset * deltaTime;
+		//Animaciones
+		
+		//Bici (1)
+		if (mainWindow.getsilla() == -1.0f)
+		{
+			movBici += movOffset * deltaTime;
+		}
 
-		//Animacion Compleja Orbe
-		movZigZag += 5.0f * deltaTime;
-		if (dir == true)
+		//Puerta (2)
+		if (mainWindow.getpuerta() == -1.0f)
 		{
-			movVert += movOffset * deltaTime;
-			
-			if (movVert > 8.0f)
+			movPuerta += movOffsetPuerta * deltaTime;
+		}
+
+		//Cajon (3)
+
+		if (mainWindow.getcajon() == -1.0f)
+		{
+			if (dirCajon == true)
 			{
-				dir = false;
+				movCajon -= movOffsetCajon * deltaTime;
+				if (movCajon <= -0.0f)
+				{
+					dirCajon = false;
+				}
+			}
+			else if (dirCajon == false)
+			{
+				movCajon += movOffsetCajon * deltaTime;
+				if (movCajon >= 0.3f)
+				{
+					dirCajon = true;
+				}
 			}
 		}
-		else if (dir == false)
-		{
-			movVert -= movOffset * deltaTime;
-			if (movVert < 0.0f)
-			{
-				dir = true;
-			}
-		}
+
+
+
+
+
 		
 		//Recibir eventos del usuario
 		glfwPollEvents();
@@ -393,8 +416,7 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		//información al shader de fuentes de iluminación
-		shaderList[0].SetDirectionalLight(&mainLight);
+		
 		
 
 		glm::mat4 model(1.0);
@@ -402,6 +424,15 @@ int main()
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
 		//**************************************************************************PISO**************************************************************************
+		
+		//Luz Exterior
+		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+			0.5f, 0.5f,
+			0.0f, 0.0f, -1.0f);
+
+		//información al shader de fuentes de iluminación
+		shaderList[0].SetDirectionalLight(&mainLight);
+		
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
@@ -415,6 +446,13 @@ int main()
 
 		//**************************************************************************EDIFICACIONES**************************************************************************
 
+		//Luz de casa
+		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+			0.5f, 0.05f,
+			0.0f, 0.0f, -1.0f);
+
+		shaderList[0].SetDirectionalLight(&mainLight);
+
 		//Casa
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
@@ -426,89 +464,138 @@ int main()
 
 		//**************************************************************************OBJETOS**************************************************************************
 
-		//PLANTA BAJA
-		//Poster Taylor (1)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Taylor.RenderModel();
+		
+		//Luz de cuartos (Objetos)
+		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+			0.5f, 0.005f,
+			0.0f, 0.0f, -1.0f);
 
-		////Cama (2)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Cama.RenderModel();
-
-		////Jarron (3)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Jarron.RenderModel();
-
-		////Buro (4) Jerarquia
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
-		//modelaux = model;
-
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Buro.RenderModel();
-
-		////Buro Puerta
-		//model = glm::translate(model, glm::vec3(0.75f, 0.1f, 0.2f));
-
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//BuroPuerta.RenderModel();
-		//
-		////Buro Cajon
-		//model = modelaux;
-		//model = glm::translate(model, glm::vec3(-0.4f, 0.4f, 0.11f));
-
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//BuroCajon.RenderModel();
-
-		////Silla (5)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
-
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Silla.RenderModel();
-
-		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//AsientoSilla.RenderModel();
+		shaderList[0].SetDirectionalLight(&mainLight);
 
 		//PLANTA ALTA
-		////Sillon Doble (6)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//SillDobl.RenderModel();
+		//Poster Taylor (1)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(47.8f, 150.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		//Lampara Pared (7)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//LamPared.RenderModel();
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Taylor.RenderModel();
 
-		////Mesa de centro (8)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Mesa.RenderModel();
+		//Cama (2)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 112.0f, -59.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Cama.RenderModel();
 
-		//Asiento Bicicleta (9)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//AsBike.RenderModel();
+		//Jarron (3)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-15.0f, 134.5f, 91.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Jarron.RenderModel();
 
-		////Sillon Individual (10)
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//SillInd.RenderModel();
+		//Buro (4) Jerarquia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 115.0f, 91.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelaux = model;
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Buro.RenderModel();
+
+		//Buro Puerta (4) Jerarquia
+		model = glm::translate(model, glm::vec3(0.75f, 0.1f, 0.2f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BuroPuerta.RenderModel();
+		
+		//Buro Cajon (4) Jerarquia
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.4f, 0.4f , 0.11f + movCajon));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BuroCajon.RenderModel();
+
+		//Silla (5)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(40.0f, 119.1f, 91.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Silla.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AsientoSilla.RenderModel();
+
+		//PLANTA BAJA
+		//Sillon Doble (6)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-23.0f, 10.35f, -5.0f));
+		model = glm::scale(model, glm::vec3(20.0f, 30.0f, 30.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SillDobl.RenderModel();
+
+		//Lampara Pared 1 (7)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.6f, 55.0f, -25.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		LamPared.RenderModel();
+
+		//Lampara Pared 2 (7)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.6f, 55.0f, -25.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		LamPared.RenderModel();
+
+		//Mesa de centro (8)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(23.0f, -0.5f, 30.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 15.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.RenderModel();
+
+		//Base Bicicleta (9) Jerarquia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(23.0f, 1.8f, -5.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 10.0f, 7.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AsBike.RenderModel();
+
+		//Asiento Silla Bicicleta (9) Jerarquia
+		
+		model = glm::translate(model, glm::vec3(-0.0f, 0.0f, -0.0f));
+		model = glm::rotate(model, movBici * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, movZigZag * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AsBikeSup.RenderModel();
+
+		//Sillon Individual (10)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 11.0f, -80.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SillInd.RenderModel();
 
 		glUseProgram(0);
 

@@ -10,7 +10,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	pitch = startPitch;
 	front = glm::vec3(0.0f, 0.0f, -1.0f);
 
-	moveSpeed = startMoveSpeed * 10 ;
+	moveSpeed = startMoveSpeed * 5 ;
 	turnSpeed = startTurnSpeed;
 
 	update();

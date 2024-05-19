@@ -13,6 +13,9 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 {
 	width = windowWidth;
 	height = windowHeight;
+	silla = 1.0f;
+	puerta = 1.0f;
+	cajon = 1.0f;
 
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -118,6 +121,22 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 			//printf("se solto la tecla %d'\n", key);
 		}
 	}
+
+	if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+	{
+		theWindow->silla = -1.0f * theWindow->silla;
+	}
+
+	if (key == GLFW_KEY_X && action == GLFW_PRESS)
+	{
+		theWindow->puerta = -1.0f * theWindow->puerta;
+	}
+
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+	{
+		theWindow->cajon = -1.0f * theWindow->cajon;
+	}
+
 }
 
 void Window::ManejaMouse(GLFWwindow* window, double xPos, double yPos)
