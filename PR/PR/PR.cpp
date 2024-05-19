@@ -60,10 +60,25 @@ Texture pisoTexture;	//Textura de piso
 //Modelos a utilizar en entorno opengl
 
 //Edificaciones
-//Model Casa;
+Model Casa;
 
 //Objetos
+//Planta Baja
 Model Taylor;
+Model Cama;
+Model Jarron;
+Model Buro;
+Model BuroPuerta;
+Model BuroCajon;
+Model Silla;
+Model AsientoSilla;
+
+//Planta Alta
+Model SillDobl;
+Model LamPared;
+Model Mesa;
+Model AsBike;
+Model SillInd;
 
 //Skybox a utilizar en entorno opengl
 //Dos tipos para el dia y la noche
@@ -179,20 +194,58 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 100.0f, 350.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
 
 	//********************************CARGA DE TEXTURAS*************************************
 	pisoTexture = Texture("Textures/piso.tga");
-	pisoTexture.LoadTextureA();
+	pisoTexture.LoadTexture();
 
 	//********************************CARGA DE MODELOS*************************************
 	//Objetos
+	//Planta Baja
 	Taylor = Model();
 	Taylor.LoadModel("Models/Taylor.obj");
 
+	Cama = Model();
+	Cama.LoadModel("Models/Cama.obj");
+
+	Jarron = Model();
+	Jarron.LoadModel("Models/Jarron.obj");
+
+	Buro = Model();
+	Buro.LoadModel("Models/Buro.obj");
+
+	BuroPuerta = Model();
+	BuroPuerta.LoadModel("Models/BuroPuerta.obj");
+
+	BuroCajon = Model();
+	BuroCajon.LoadModel("Models/BuroCajon.obj");
+
+	Silla = Model();
+	Silla.LoadModel("Models/Silla.obj");
+
+	AsientoSilla = Model();
+	AsientoSilla.LoadModel("Models/AsientoSilla.obj");
+
+	////Planta Alta
+	//SillDobl = Model();
+	//SillDobl.LoadModel("Models/SillDobl.obj");
+
+	//LamPared = Model();
+	//LamPared.LoadModel("Models/LamPared.obj");
+
+	//Mesa = Model();
+	//Mesa.LoadModel("Models/Mesa.obj");
+
+	//AsBike = Model();
+	//AsBike.LoadModel("Models/AsBike.obj");
+
+	//SillInd = Model();
+	//SillInd.LoadModel("Models/SillInd.obj");
+
 	//Cornelias
-	//Casa = Model();
-	//Casa.LoadModel("Models/Casa.obj");
+	Casa = Model();
+	Casa.LoadModel("Models/Casa.obj");
 
 	std::vector<std::string> skyboxFaces;
 
@@ -210,7 +263,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.75f, 0.3f,
+		0.65f, 0.3f,
 		0.0f, 0.0f, -1.0f);
 
 	//LUCES PUNTUALES
@@ -351,7 +404,7 @@ int main()
 		//**************************************************************************PISO**************************************************************************
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 1.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 
@@ -362,28 +415,100 @@ int main()
 
 		//**************************************************************************EDIFICACIONES**************************************************************************
 
-		//Casa
-		/*model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0f.0f));
-		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		////Casa
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
+		//model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Casa.RenderModel();
-		glDisable(GL_BLEND);*/
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Casa.RenderModel();
+		
 
 		//**************************************************************************OBJETOS**************************************************************************
 
+		//PLANTA BAJA
 		//Poster Taylor (1)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Taylor.RenderModel();
+
+		////Cama (2)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Cama.RenderModel();
+
+		////Jarron (3)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Jarron.RenderModel();
+
+		////Buro (4) Jerarquia
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		//modelaux = model;
+
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Buro.RenderModel();
+
+		////Buro Puerta
+		//model = glm::translate(model, glm::vec3(0.75f, 0.1f, 0.2f));
+
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//BuroPuerta.RenderModel();
+		//
+		////Buro Cajon
+		//model = modelaux;
+		//model = glm::translate(model, glm::vec3(-0.4f, 0.4f, 0.11f));
+
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//BuroCajon.RenderModel();
+
+		//Silla (5)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
-		//model = glm::rotate(model, movAnimBas2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Taylor.RenderModel();
+		Silla.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AsientoSilla.RenderModel();
+
+		//PLANTA ALTA
+		////Sillon Doble (6)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//SillDobl.RenderModel();
+
+		//Lampara Pared (7)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//LamPared.RenderModel();
+
+		////Mesa de centro (8)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Mesa.RenderModel();
+
+		//Asiento Bicicleta (9)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//AsBike.RenderModel();
+
+		////Sillon Individual (10)
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 5.0f, -5.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//SillInd.RenderModel();
 
 		glUseProgram(0);
 
