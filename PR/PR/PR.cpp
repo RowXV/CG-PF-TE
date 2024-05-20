@@ -39,15 +39,21 @@ const float toRadians = 3.14159265f / 180.0f;
 
 //Animacion Silla Bici
 float movBici = 0.0f;					//Movimiento en el eje y de asiento
-float movOffset;						//Velocidad
+float movOffsetBici;						//Velocidad
 
 float movPuerta = 0.0f;					//Movimiento puerta
 float movOffsetPuerta;					//Velocidad
+bool dirPuerta = true;					//direccion Puerta
 
 float movCajon = 0.0f;					//Movimiento cajon
 float movOffsetCajon;					//Velocidad
-bool dirCajon = true;					//direccion
+bool dirCajon = true;					//direccion cajon
 
+float movPoster = 0.0f;					//Movimiento Poster
+
+float lucesPoster = 0.0f;				//Luces Poster
+float movOffsetLuces;					//Velocidad
+bool rangoLuces = true;					//Rangos
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -84,7 +90,6 @@ Model AsBikeSup;
 Model SillInd;
 
 //Skybox a utilizar en entorno opengl
-//Dos tipos para el dia y la noche
 Skybox skybox;
 
 //Materiales a utilizar en entorno opengl
@@ -197,6 +202,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
+	//Camara estatica ubicacion
 	camera = Camera(glm::vec3(0.0f, 20.0f, 70.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
 
 	//********************************CARGA DE TEXTURAS*************************************
@@ -205,7 +211,7 @@ int main()
 
 	//********************************CARGA DE MODELOS*************************************
 	//Objetos
-	//Planta Baja
+	//Planta Alta
 	Taylor = Model();
 	Taylor.LoadModel("Models/Taylor.obj");
 
@@ -230,7 +236,7 @@ int main()
 	AsientoSilla = Model();
 	AsientoSilla.LoadModel("Models/AsientoSilla.obj");
 
-	////Planta Alta
+	//Planta Baja
 	SillDobl = Model();
 	SillDobl.LoadModel("Models/SillDobl.obj");
 
@@ -249,7 +255,7 @@ int main()
 	SillInd = Model();
 	SillInd.LoadModel("Models/SillInd.obj");
 
-	//Cornelias
+	//Cornelias Casa
 	Casa = Model();
 	Casa.LoadModel("Models/Casa.obj");
 
@@ -267,66 +273,52 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
-	//luz direccional, sólo 1 y siempre debe de existir
-	/*mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.65f, 0.3f,
-		0.0f, 0.0f, -1.0f);*/
-
 	//LUCES PUNTUALES
 	//Contador de luces puntuales
 	unsigned int pointLightCount = 0;
 
-	//*********************************+***LUZ DE LA JOYA*************************************
-	pointLights[0] = PointLight(0.3f, 0.3f, 1.0f,
-		0.0f, 1.0f,
-		244.0f, 15.0f, -114.0f, 
-		0.0075f, 0.005f, 0.0025f);
-	pointLightCount++;
-	//*********************************+***LUZ DEL ORO*************************************
-	pointLights[1] = PointLight(1.0f, 1.0f, 0.3f,
-		0.5f, 0.001f,
-		-417.0f, 3.0f, 232.0f,
+	//*********************************+***LUZ DE LAMPARA IZQUIERDA*************************************
+	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
+		0.4f, 0.1f,
+		-28.6f, 55.0f, -25.0f,
 		0.75f, 0.005f, 0.01f);
 	pointLightCount++;
-	//*********************************+***LUZ DEL ORBE*************************************
-	pointLights[2] = PointLight(0.3f, 1.0f, 0.3f,
-		0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0075f, 0.01f, 0.005f);
+	//*********************************+***LUZ DE LAMPARA DERECHA*************************************
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		0.4f, 0.1f,
+		28.6f, 55.0f, -25.0f,
+		0.75f, 0.005f, 0.01f);
 	pointLightCount++;
-
 
 	//LUCES SPOTLIGHT
 	//Contador de luces spotlight
 	unsigned int spotLightCount = 0;
 
 	//Primera luz Spotlight
-	//*********************************+***LUZ DEL CARRO*************************************
-	spotLights[0] = SpotLight(0.3f, 0.3f, 1.0f,
+	//*********************************+***LUCES DEL POSTER*************************************
+	spotLights[0] = SpotLight(1.0f, 0.0f, 0.0f,
 		1.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
+		5.0f, 150.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0003f, 0.0002f,
-		15.0f);
-	spotLightCount++;
-	//*********************************+***LUZ DEL VOCHO*************************************
-	spotLights[1] = SpotLight(1.0f, 1.0f, 0.3f,
-		1.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0003f, 0.0002f,
-		15.0f);
-	spotLightCount++;
-	//*********************************+***LUZ DEL VOCHO*************************************
-	spotLights[2] = SpotLight(1.0f, 0.3f, 0.3f,
-		1.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0003f, 0.0002f,
-		15.0f);
+		1.0f, 0.003f, 0.0035f,
+		30.0f);
 	spotLightCount++;
 
-	//Continuar para más luces
+	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
+		1.0f, 2.0f,
+		5.0f, 150.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.003f, 0.0035f,
+		30.0f);
+	spotLightCount++;
+
+	spotLights[2] = SpotLight(0.0f, 0.0f, 1.0f,
+		1.0f, 2.0f,
+		5.0f, 150.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.003f, 0.0035f,
+		30.0f);
+	spotLightCount++;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
@@ -336,10 +328,10 @@ int main()
 	//Loop mientras no se cierra la ventana
 
 	//Variables animacion Velocidad
-	movOffset = 1.5f;
+	movOffsetBici = 1.5f;
 	movOffsetPuerta = 1.5f;
 	movOffsetCajon = 0.01f;
-
+	movOffsetLuces = 0.1f;
 
 	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
 
@@ -351,21 +343,34 @@ int main()
 		lastTime = now;
 
 		//Animaciones
-		
 		//Bici (1)
 		if (mainWindow.getsilla() == -1.0f)
 		{
-			movBici += movOffset * deltaTime;
+			movBici += movOffsetBici * deltaTime;
 		}
 
 		//Puerta (2)
 		if (mainWindow.getpuerta() == -1.0f)
 		{
-			movPuerta += movOffsetPuerta * deltaTime;
+			if (dirPuerta == true)
+			{
+				movPuerta -= movOffsetPuerta * deltaTime;
+				if (movPuerta <= -0.0f)
+				{
+					dirPuerta = false;
+				}
+			}
+			else if (dirPuerta == false)
+			{
+				movPuerta += movOffsetPuerta * deltaTime;
+				if (movPuerta >= 90.0f)
+				{
+					dirPuerta = true;
+				}
+			}
 		}
 
 		//Cajon (3)
-
 		if (mainWindow.getcajon() == -1.0f)
 		{
 			if (dirCajon == true)
@@ -385,15 +390,35 @@ int main()
 				}
 			}
 		}
-
-
-
-
-
 		
+		//Poster para ajustar cuadro (4)
+		if (mainWindow.getposter() ==-1.0f)
+		{
+			movPoster += 2.5f * deltaTime;
+		}
+
+		//Poster Luces (5)
+		if (rangoLuces == true)
+		{
+			lucesPoster += movOffsetLuces * deltaTime;
+			if (lucesPoster >= 15.0)
+			{
+				rangoLuces = false;
+			}
+		}
+		else if (rangoLuces == false)
+		{
+			lucesPoster -= movOffsetLuces * deltaTime;
+			if (lucesPoster <= -5.0)
+			{
+				rangoLuces = true;
+			}
+		}
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
 
+		//Controles de camara
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
@@ -416,14 +441,12 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		
-		
-
+		//Variables a utilizar
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
-		//**************************************************************************PISO**************************************************************************
+		//**************************************************************************LUCES**************************************************************************
 		
 		//Luz Exterior
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
@@ -432,7 +455,26 @@ int main()
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		
+		shaderList[0].SetPointLights(pointLights, pointLightCount);
+
+		//Dependiendo valor cambia el color de la luz spot
+		if (lucesPoster > 10.0f)
+		{
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);//Rojo
+			
+		}
+		else if (lucesPoster <= 10.0f && lucesPoster > 0.0f)
+		{
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);//Verde
+			
+		}
+		else if (lucesPoster < 0.0f)
+		{
+			shaderList[0].SetSpotLights(spotLights + 2, spotLightCount - 1);//Azul
+			
+		}
+
+		//**************************************************************************PISO**************************************************************************
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
@@ -460,11 +502,9 @@ int main()
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Casa.RenderModel();
-		
 
 		//**************************************************************************OBJETOS**************************************************************************
 
-		
 		//Luz de cuartos (Objetos)
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 			0.5f, 0.005f,
@@ -478,6 +518,7 @@ int main()
 		model = glm::translate(model, glm::vec3(47.8f, 150.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 10 * sin(glm::radians(movPoster)) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Taylor.RenderModel();
@@ -486,6 +527,7 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 112.0f, -59.0f));
 		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Cama.RenderModel();
 
@@ -493,6 +535,7 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-15.0f, 134.5f, 91.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Jarron.RenderModel();
 
@@ -503,12 +546,12 @@ int main()
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		modelaux = model;
-
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Buro.RenderModel();
 
 		//Buro Puerta (4) Jerarquia
 		model = glm::translate(model, glm::vec3(0.75f, 0.1f, 0.2f));
+		model = glm::rotate(model, movPuerta * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BuroPuerta.RenderModel();
@@ -520,7 +563,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BuroCajon.RenderModel();
 
-		//Silla (5)
+		//Silla (5) Jerarquia, en caso de que se quiera girar el asiento pero ya hay uno que lo hace
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(40.0f, 119.1f, 91.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
@@ -529,7 +572,9 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Silla.RenderModel();
 
+		//Silla (5) Asiento
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		AsientoSilla.RenderModel();
 
@@ -546,8 +591,8 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-30.6f, 55.0f, -25.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LamPared.RenderModel();
 
 		//Lampara Pared 2 (7)
@@ -557,7 +602,6 @@ int main()
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
 		LamPared.RenderModel();
 
 		//Mesa de centro (8)
@@ -579,11 +623,8 @@ int main()
 		AsBike.RenderModel();
 
 		//Asiento Silla Bicicleta (9) Jerarquia
-		
 		model = glm::translate(model, glm::vec3(-0.0f, 0.0f, -0.0f));
 		model = glm::rotate(model, movBici * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//model = glm::rotate(model, movZigZag * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		AsBikeSup.RenderModel();

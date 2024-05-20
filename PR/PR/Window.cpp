@@ -16,6 +16,8 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	silla = 1.0f;
 	puerta = 1.0f;
 	cajon = 1.0f;
+	poster = 1.0f;
+
 
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -135,6 +137,11 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_C && action == GLFW_PRESS)
 	{
 		theWindow->cajon = -1.0f * theWindow->cajon;
+	}
+
+	if (key == GLFW_KEY_V && action == GLFW_PRESS)
+	{
+		theWindow->poster = -1.0f * theWindow->poster;
 	}
 
 }

@@ -1,3 +1,11 @@
-﻿  LINK : falta base de datos C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\Debug\PR.pdb del programa; ejecutando vínculo completo
-LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+﻿  PR.cpp
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\PR\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+  (compilando archivo de origen "PR.cpp")
+  
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\PR\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+  (compilando archivo de origen "PR.cpp")
+  
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\PR\PR.cpp(336,24): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\PR\PR.cpp(340,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\PR\PR.cpp(342,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   PR.vcxproj -> C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Proyectos\Final\Rep\PR\Debug\PR.exe

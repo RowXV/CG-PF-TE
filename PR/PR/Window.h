@@ -14,11 +14,14 @@ public:
 	GLfloat getXChange();
 	GLfloat getYChange();
 
+	//Funciones para las teclas
 	GLfloat getsilla() { return silla; }
 
 	GLfloat getpuerta() { return puerta; }
 
 	GLfloat getcajon() { return cajon; }
+
+	GLfloat getposter() { return poster; }
 
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
@@ -37,14 +40,15 @@ private:
 	GLfloat xChange;
 	GLfloat yChange;
 
-
+	//Para las teclas
 	GLfloat silla;
 
 	GLfloat puerta;
 
 	GLfloat cajon;
 	
-	
+	GLfloat poster;
+
 
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
