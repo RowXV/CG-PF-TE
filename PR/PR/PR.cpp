@@ -39,7 +39,7 @@ const float toRadians = 3.14159265f / 180.0f;
 
 //Animacion Silla Bici
 float movBici = 0.0f;					//Movimiento en el eje y de asiento
-float movOffsetBici;						//Velocidad
+float movOffsetBici;					//Velocidad
 
 float movPuerta = 0.0f;					//Movimiento puerta
 float movOffsetPuerta;					//Velocidad
@@ -166,7 +166,7 @@ void CreateObjects()
 	};
 
 	GLfloat floorVertices[] = {
-		-10.0f, 0.0f, -10.0f,	0.0f, 1.0f,		0.0f, -1.0f, 0.0f,	//0
+		-10.0f, 0.0f, -10.0f,	0.0f, 1.0f,	0.0f, -1.0f, 0.0f,	//0
 		10.0f, 0.0f, -10.0f,	1.0f, 1.0f,	0.0f, -1.0f, 0.0f,	//1
 		-10.0f, 0.0f, 10.0f,	0.0f, 0.0f,	0.0f, -1.0f, 0.0f,	//2
 		10.0f, 0.0f, 10.0f,		1.0f, 0.0f,	0.0f, -1.0f, 0.0f	//3
@@ -425,7 +425,10 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//Para que la camara vea el skybox
 		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
